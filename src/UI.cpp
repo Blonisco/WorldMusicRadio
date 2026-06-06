@@ -1,7 +1,15 @@
 #include "UI.h"
+#include <GLFW/glfw3.h>
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include <string>
+#include <vector>
 char UI::search_input[30];
-int UI::init()
+int UI::init(RadioPlayer *player_)
 {
+	player = player_;
+
 	if (!glfwInit())
 		return -1;
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -97,6 +105,7 @@ void UI::search(apiProvider &api)
 					    ImGuiSelectableFlags_AllowDoubleClick)) {
 				if (ImGui::IsMouseDoubleClicked(0)) {
 					selected_index = i;
+					play(api.get_list()[i].url.c_str());
 				}
 			}
 
@@ -131,6 +140,13 @@ void UI::search(apiProvider &api)
 	if (true) { //测试用
 		ImGui::Text("Retry_time:%d", api.get_retry_time());
 		ImGui::Text("Selected:%d", selected_index);
+		ImGui::Text("Play:%d", is_playing);
 	}
 	ImGui::End();
+}
+
+void UI::play(const std::string &url)
+{
+	player->play(url);
+	is_playing = 1;
 }

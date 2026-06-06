@@ -3,3 +3,7 @@ out/
 plugins/
 *.dll
 *.exe
+.vscode/
+.clangd
+imgui.ini
+compile_commands.json

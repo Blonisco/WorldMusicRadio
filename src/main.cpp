@@ -6,9 +6,13 @@
 #include "apiProvider.hpp"
 int main()
 {
-	printf("Text");
+	RadioPlayer player;
+	if (!player.init()) {
+		printf("Failed to init VLC\n");
+		return -1;
+	}
 	UI ui;
-	ui.init();
+	ui.init(&player);
 
 	apiProvider api;
 

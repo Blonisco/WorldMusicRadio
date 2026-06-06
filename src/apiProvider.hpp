@@ -1,7 +1,6 @@
 #ifndef API_PROVIDER_H_
 #define API_PROVIDER_H_
 
-#define WIN32_LEAN_AND_MEAN // 减少 Windows 头文件污染
 #include <vector>
 #include <cpr/cpr.h>
 #include "Radio.hpp"
