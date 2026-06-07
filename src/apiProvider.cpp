@@ -1,5 +1,5 @@
 #include "apiProvider.hpp"
-
+#include <json.hpp>
 void apiProvider::search(std::string name, int limit)
 {
 	search_limit = limit;
@@ -33,9 +33,9 @@ void apiProvider::get_response(int offset)
 void apiProvider::update()
 {
 	//检查网络爬取是否完成
-	if (res.valid() && res.wait_for(std::chrono::seconds(0)) ==
-				   std::future_status::ready) {
-		r = res.get();
+	if (res->valid() && res->wait_for(std::chrono::seconds(0)) ==
+				    std::future_status::ready) {
+		r = res->get();
 
 		if (r.status_code == 200) {
 			parse_json(r.text);

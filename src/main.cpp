@@ -1,8 +1,6 @@
 #include "UI.h"
 #include <stdio.h>
 #include <GLFW/glfw3.h>
-#include <windows.h>
-#include <direct.h>
 #include "apiProvider.hpp"
 int main()
 {

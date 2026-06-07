@@ -1,15 +1,15 @@
 #ifndef API_PROVIDER_H_
 #define API_PROVIDER_H_
 
+#include <optional>
 #include <vector>
 #include <cpr/cpr.h>
 #include "Radio.hpp"
-#include "json.hpp"
 #include <string>
 class apiProvider {
     private:
 	std::vector<Radio> list;
-	cpr::AsyncResponse res;
+	std::optional<cpr::AsyncResponse> res;
 	cpr::Response r;
 	std::string search_name;
 	bool is_loading;

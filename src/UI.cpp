@@ -75,7 +75,8 @@ void UI::search(apiProvider &api)
 	//搜索栏界面
 	ImGui::Begin("##search", nullptr,
 		     ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
-			     ImGuiWindowFlags_NoCollapse);
+			     ImGuiWindowFlags_NoCollapse |
+			     ImGuiWindowFlags_NoTitleBar);
 	//搜索表
 	if (ImGui::BeginTable(
 		    "RadioTable", 3,
@@ -142,6 +143,26 @@ void UI::search(apiProvider &api)
 		ImGui::Text("Selected:%d", selected_index);
 		ImGui::Text("Play:%d", is_playing);
 	}
+	ImGui::End();
+
+	//按钮栏
+	ImGui::SetNextWindowPos(ImVec2{ 960, 500 });
+	ImGui::SetNextWindowSize(ImVec2{ 320, 460 });
+	ImGui::Begin("##Button", nullptr,
+		     ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+			     ImGuiWindowFlags_NoCollapse |
+			     ImGuiWindowFlags_NoTitleBar);
+	ImGui::SetCursorPos(ImVec2(120, 120));
+	if (ImGui::Button(is_playing ? "\uf04c" : "|\uf04b")) { //播放恢复栏
+		if (is_playing == 1) {
+			player->stop();
+			is_playing = 0;
+		} else if (is_playing == 0) {
+			player->resume();
+			is_playing = 1;
+		}
+	}
+
 	ImGui::End();
 }
 

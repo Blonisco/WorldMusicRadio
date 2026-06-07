@@ -13,6 +13,7 @@ class RadioPlayer {
 	RadioPlayer();
 	~RadioPlayer();
 
+	void resume();
 	bool init();
 	void play(const std::string &url);
 	void stop();

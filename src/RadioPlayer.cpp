@@ -54,3 +54,10 @@ void RadioPlayer::stop()
 		libvlc_media_player_stop(player);
 	}
 }
+
+void RadioPlayer::resume()
+{
+	if (player) {
+		libvlc_media_player_play(player);
+	}
+}
