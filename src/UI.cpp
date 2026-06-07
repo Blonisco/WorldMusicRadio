@@ -5,6 +5,8 @@
 #include "imgui_impl_opengl3.h"
 #include <string>
 #include <vector>
+#include "style.hpp"
+#include "themes.hpp"
 char UI::search_input[30];
 int UI::init(RadioPlayer *player_)
 {
@@ -141,7 +143,7 @@ void UI::search(apiProvider &api)
 	if (true) { //测试用
 		ImGui::Text("Retry_time:%d", api.get_retry_time());
 		ImGui::Text("Selected:%d", selected_index);
-		ImGui::Text("Play:%d", is_playing);
+		ImGui::Text("Play:%d", player->is_playing());
 	}
 	ImGui::End();
 
@@ -153,21 +155,53 @@ void UI::search(apiProvider &api)
 			     ImGuiWindowFlags_NoCollapse |
 			     ImGuiWindowFlags_NoTitleBar);
 	ImGui::SetCursorPos(ImVec2(120, 120));
-	if (ImGui::Button(is_playing ? "\uf04c" : "|\uf04b")) { //播放恢复栏
-		if (is_playing == 1) {
+	if (ImGui::Button(player->is_playing() ? "\uf04c" : "\uf04b",
+			  ImVec2{ 40, 40 })) { //播放恢复栏
+		if (player->is_playing() == true) {
 			player->stop();
-			is_playing = 0;
-		} else if (is_playing == 0) {
+		} else if (player->is_playing() == false) {
 			player->resume();
-			is_playing = 1;
 		}
 	}
 
+	ImGui::SameLine();
+
+	if (ImGui::Button(player->is_muted() ? "\uf6a9" : "\uf208",
+			  ImVec2{ 40, 40 })) {
+		player->change_muted();
+	}
+	ImGui::End();
+
+	ImGui::SetNextWindowPos(ImVec2{ 960, 0 });
+	ImGui::SetNextWindowSize(ImVec2{ 320, 500 });
+	ImGui::Begin("##Style", nullptr,
+		     ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+			     ImGuiWindowFlags_NoCollapse |
+			     ImGuiWindowFlags_NoTitleBar);
+	ImGui::SetCursorPos(ImVec2(100, 200));
+	if (ImGui::Button("cherry", ImVec2{ 150, 40 })) {
+		style.set_theme(theme::cherry);
+	}
+	ImGui::SetCursorPos(ImVec2(100, 240));
+	if (ImGui::Button("night blue", ImVec2{ 150, 40 })) {
+		style.set_theme(theme::night_blue);
+	}
+	ImGui::SetCursorPos(ImVec2(100, 280));
+	if (ImGui::Button("neon", ImVec2{ 150, 40 })) {
+		style.set_theme(theme::neon);
+	}
+	ImGui::SetCursorPos(ImVec2(100, 320));
+	if (ImGui::Button("paper", ImVec2{ 150, 40 })) {
+		style.set_theme(theme::paper);
+	}
+	ImGui::SetCursorPos(ImVec2(100, 360));
+	if (ImGui::Button("purple", ImVec2{ 150, 40 })) {
+		style.set_theme(theme::purple);
+	}
 	ImGui::End();
 }
 
 void UI::play(const std::string &url)
 {
 	player->play(url);
-	is_playing = 1;
 }

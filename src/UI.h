@@ -1,5 +1,6 @@
 #ifndef UI_H_
 #define UI_H_
+#include "style.hpp"
 #include <GLFW/glfw3.h>
 #include "RadioPlayer.h"
 #include "apiProvider.hpp"
@@ -7,9 +8,9 @@ class UI {
     private:
 	int selected_index = -1;
 	int selected_limit = 20;
-	int is_playing = 0;
 	RadioPlayer *player;
 	static char search_input[30];
+	Style style;
 
     public:
 	GLFWwindow *window;

@@ -22,7 +22,7 @@ include(FetchContent)
 FetchContent_Declare(
     cpr
     GIT_REPOSITORY https://github.com/libcpr/cpr.git
-    GIT_TAG        1.10.x  
+    GIT_TAG        1.10.x
 )
 set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "")
 set(CPR_BUILD_TESTS OFF CACHE INTERNAL "")
@@ -39,6 +39,7 @@ set(SOURCES
     ${Src_DIR}/UI.cpp
     ${Src_DIR}/RadioPlayer.cpp
     ${Src_DIR}/apiProvider.cpp
+    ${Src_DIR}/style.cpp
     ${IMGUI_DIR}/imgui.cpp
     ${IMGUI_DIR}/imgui_draw.cpp
     ${IMGUI_DIR}/imgui_tables.cpp
@@ -51,9 +52,9 @@ set(SOURCES
 # 4. 创建可执行文件
 # -------------------------------------------------------------------
 if(WIN32)
-    add_executable(${PROJECT_NAME} WIN32 ${SOURCES})
+  add_executable(${PROJECT_NAME} WIN32 ${SOURCES})
 else()
-    add_executable(${PROJECT_NAME} ${SOURCES})
+  add_executable(${PROJECT_NAME} ${SOURCES})
 endif()
 
 # -------------------------------------------------------------------
