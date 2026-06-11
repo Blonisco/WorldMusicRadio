@@ -61,5 +61,16 @@ inline Theme paper = {
 	.accentHover = ImVec4(0.85f, 0.65f, 0.30f, 1.0f),
 	.accentActive = ImVec4(0.60f, 0.45f, 0.15f, 1.0f),
 };
+inline Theme classic_dark = {
+	.bg = ImVec4(0.10f, 0.10f, 0.10f, 1.0f),
+	.panel = ImVec4(0.20f, 0.20f, 0.20f, 1.0f),
+
+	.text = ImVec4(0.95f, 0.96f, 0.98f, 1.0f),
+	.textDim = ImVec4(0.50f, 0.50f, 0.50f, 1.0f),
+
+	.accent = ImVec4(0.26f, 0.59f, 0.98f, 1.0f),
+	.accentHover = ImVec4(0.26f, 0.59f, 0.98f, 0.80f),
+	.accentActive = ImVec4(0.06f, 0.53f, 0.98f, 1.0f),
+};
 }
 #endif // !STYLE_THEME_H_

@@ -1,13 +1,19 @@
 #include "apiProvider.hpp"
+#include "Country.hpp"
+#include "cpr/parameters.h"
+#include <chrono>
 #include <json.hpp>
-void apiProvider::search(std::string name, int limit)
+#include "UI.h"
+void apiProvider::search(std::string name, int limit, std::string country)
 {
+	start_time = std::chrono::steady_clock::now();
 	search_limit = limit;
 	retry_time = 0;
 	seen_names.clear();
 	list.clear();
 	search_name = name;
 	is_loading = true;
+	search_country = country;
 	get_response();
 }
 
@@ -18,14 +24,21 @@ void apiProvider::search(std::string name, int limit)
 */
 void apiProvider::get_response(int offset)
 {
+	cpr::Parameters params{
+		{ "name", search_name },
+		{ "limit", std::to_string(search_limit + 10) },
+		{ "offset", std::to_string(offset) },
+	};
+	if (search_country != "") {
+		params.Add({ "countrycode",
+			     country_to_countrycode[search_country] });
+	}
+
 	retry_time++;
 	res = cpr::GetAsync(
 		cpr::Url{
 			"https://de1.api.radio-browser.info/json/stations/search" },
-		cpr::Parameters{ { "name", search_name },
-				 { "limit", std::to_string(search_limit + 10) },
-				 { "offset", std::to_string(offset) } },
-		cpr::VerifySsl{ false });
+		params, cpr::VerifySsl{ false });
 }
 /*
 @brief 根据爬取获得res获得r的json信息
@@ -33,20 +46,24 @@ void apiProvider::get_response(int offset)
 void apiProvider::update()
 {
 	//检查网络爬取是否完成
-	if (res->valid() && res->wait_for(std::chrono::seconds(0)) ==
-				    std::future_status::ready) {
+	if (res && res->valid() &&
+	    res->wait_for(std::chrono::seconds(0)) ==
+		    std::future_status::ready) {
 		r = res->get();
 
 		if (r.status_code == 200) {
 			parse_json(r.text);
 		} else {
-			//error
+			ui->notice("Failed to get the information!");
+		}
+		if (retry_time == 6 && list.size() == 0) {
+			ui->notice("Can't find anything!");
 		}
 		is_loading = false;
 	}
-	if ((retry_time <= 5) && (!is_loading) && list.size() < 20) {
+	if ((retry_time <= 5) && (!is_loading) && list.size() < search_limit) {
 		is_loading = true;
-		get_response(list.size()); //待修改：数字错误。
+		get_response(list.size());
 	}
 }
 
@@ -60,8 +77,7 @@ void apiProvider::parse_json(const std::string &json_text)
 			return;
 		}
 		for (const auto &item : data) {
-			if (list.size() >
-			    search_limit) { //超过20个就舍弃（待修改：取消硬编码）
+			if (list.size() > search_limit) {
 				break;
 			}
 
@@ -92,3 +108,8 @@ std::vector<Radio> &apiProvider::get_list()
 {
 	return list;
 };
+
+apiProvider::apiProvider(UI *UI)
+	: ui(UI)
+{
+}

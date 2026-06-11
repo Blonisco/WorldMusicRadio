@@ -11,7 +11,7 @@ int main()
 	}
 	UI ui;
 	ui.init(&player);
-	apiProvider api;
+	apiProvider api(&ui);
 
 	while (!glfwWindowShouldClose(ui.window)) {
 		api.update();
